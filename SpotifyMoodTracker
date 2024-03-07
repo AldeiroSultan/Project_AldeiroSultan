@@ -1,0 +1,42 @@
+# Load the Shiny package
+library(shiny)
+
+# Define UI for application
+ui <- fluidPage(
+   # Application title
+   titlePanel("Music Genre and Mood"),
+   
+   # Sidebar with a select input for genres
+   sidebarLayout(
+      sidebarPanel(
+         selectInput("genre",
+                     "Choose a music genre:",
+                     choices = list("R&B", "Rock", "Jazz", "Pop"))
+      ),
+      
+      # Show the selected mood
+      mainPanel(
+         textOutput("mood")
+      )
+   )
+)
+
+# Define server logic
+server <- function(input, output) {
+   output$mood <- renderText({
+      # Match genres to moods
+      mood_map <- list("R&B" = "Float",
+                       "Rock" = "Power",
+                       "Jazz" = "Chill",
+                       "Pop" = "Happy")
+      
+      # Get the mood associated with the selected genre
+      selected_mood <- mood_map[[input$genre]]
+      
+      # Display the mood
+      paste("The mood for", input$genre, "is:", selected_mood)
+   })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
